@@ -8,6 +8,7 @@ include_directories("/usr/local/lib")
 include_directories("/usr/local/include")
 include_directories("./include")
 include_directories("../3rdParty/tinyxml2/")
+include_directories("../3rdParty/boost/boost")
 # Project properties
 SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
@@ -28,10 +29,7 @@ set(DHCP_SOURCES src/DhcpServer.cpp
                  src/LeasingMonitor.cpp
                  src/ReservedAddresses.cpp
                  src/AddressesElector.cpp
-                 src/MessageHandler.cpp)
-                 
-
-link_libraries(-lboost_serialization)           
+                 src/MessageHandler.cpp)       
 
 # Executable
 add_executable( ${This} main.cpp ${DHCP_SOURCES})
