@@ -1,9 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import os
-import pip
-import subprocess
-import sys
 import wget
 
 boost_version = '1_72_0'

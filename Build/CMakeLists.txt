@@ -12,8 +12,9 @@ include_directories("../3rdParty/boost/boost")
 # Project properties
 SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/outputApp)
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/outputApp)
+
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/../outputApp)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/../outputApp)
 
 # Boost
 set(Boost_USE_MULTITHREADED ON)
