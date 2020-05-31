@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 set(This DHCP_Server)
 project(${This})
 
-set(LIBRARY_OUTPUT_PATH ./outputApp)
-set(EXECUTABLE_OUTPUT_PATH ./outputApp)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/outputApp)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/outputApp)
 
 set (STD_CXX "c++17")
 set (REDISCPP_FLAGS "-DREDISCPP_HEADER_ONLY=ON")
@@ -12,8 +12,8 @@ set(BOOST_ROOT /usr/include/boost)
 set(Boost_INCLUDE_DIR /usr/include/boost/include)
 set(Boost_LIBRARY_DIR /usr/include/boost/lib)
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -std=${STD_CXX} ${REDISCPP_FLAGS}")
-set (CMAKE_CXX_FLAGS_RELEASE "-O3 -g0 -std=${STD_CXX} -Wall -DNDEBUG ${REDISCPP_FLAGS}")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall ")
+set (CMAKE_CXX_FLAGS_RELEASE "-O3 -g0 -Wall -DNDEBUG")
 set (CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(SOURCES src/DhcpServer.cpp
@@ -30,14 +30,13 @@ set(SOURCES src/DhcpServer.cpp
             src/DhcpAckCreator.cpp
             src/DhcpUtils.cpp)
 
-find_package(Boost 1.72.0 REQUIRED COMPONENTS serialization)
+find_package(Boost 1.72.0 REQUIRED)
 
 # Executable
 add_executable( ${This} main.cpp ${SOURCES})
 
 find_library(tinyxml tinyxml2 "../3rdParty/tinyxml2")
 target_link_libraries(${This} PRIVATE ${tinyxml})
-target_link_libraries(${This} PRIVATE Boost::serialization)
 
 target_include_directories(${This} PRIVATE "./include")
 target_include_directories(${This} PRIVATE "/usr/include/boost/include")
