@@ -1,5 +1,13 @@
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
-SET(PROJECT_ROOT CMAKE_CURRENT_SOURCE_DIR)
+set(This DHCP_SERVER_PROJECT)
+project(${This})
 
-add_subdirectory(Build)
-#add_subdirectory(Tests)
+# Project properties
+SET(CMAKE_CXX_STANDARD 17)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
+SET(Boost_USE_MULTITHREAD ON)
+SET(Boost_NO_SYSTEM_PATHS TRUE)
+
+add_subdirectory(Sources)
+add_subdirectory(Tests)
