@@ -1,5 +1,7 @@
 #include "AutomaticAddressAllocator.h"
+#include <syslog.h>
 #include "DhcpDatagram.h"
+#include <iostream>
 
 AutomaticAddressAllocator::AutomaticAddressAllocator(boost::asio::io_context& ioContext,AssignedAddresses& _assignedAddresses) :
                                                     ioContext{ioContext},receivedMessageHandler{_assignedAddresses},
@@ -20,7 +22,6 @@ void AutomaticAddressAllocator::listen() {
         this->receivedMessageHandler.clear();
 
         bytesRead = socket.receive_from(boost::asio::buffer(*receivedMessageHandler.getBuffer()), remoteEndpoint);
-        std::cout<<"THERE IS A AMESSAGE"<<std::endl;
         if(bytesRead > 0 ) {
             this->datagramReceived(bytesRead);
         } else {

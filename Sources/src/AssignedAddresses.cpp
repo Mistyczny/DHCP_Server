@@ -23,6 +23,7 @@ std::vector<AssignedAddress>& AssignedAddresses::getAddrStorage(){
 
 bool AssignedAddresses::push(AssignedAddress& addrToAssign) {
     std::scoped_lock lock{locker};
+    if(this->contain_nolock(addrToAssign)) return false;
     addrStorage.push_back(std::move(addrToAssign));
     return true;
 }
@@ -58,12 +59,39 @@ size_t AssignedAddresses::size_nolock() const {
     return this->addrStorage.size();
 }
 
-bool AssignedAddresses::contain(boost::asio::ip::address_v4 addr){
+bool AssignedAddresses::contain(const boost::asio::ip::address_v4& addr){
     std::scoped_lock lock{locker};
     bool found{false};
 
     for(std::vector<AssignedAddress>::iterator iter = addrStorage.begin(); iter!=addrStorage.end();iter++){
         if(iter->ip == addr) {
+            found = true;
+            break;
+        }
+    }
+
+    return found;
+}
+
+bool AssignedAddresses::contain_nolock(AssignedAddress searchedAddress) {
+    bool found{false};
+
+    for(std::vector<AssignedAddress>::iterator iter = addrStorage.begin(); iter!=addrStorage.end();iter++) {
+        if(*iter == searchedAddress) {
+            found = true;
+            break;
+        }
+    }
+
+    return found;
+}
+
+bool AssignedAddresses::contain(AssignedAddress searchedAddress) {
+    std::scoped_lock lock{locker};
+    bool found{false};
+
+    for(std::vector<AssignedAddress>::iterator iter = addrStorage.begin(); iter!=addrStorage.end();iter++) {
+        if(*iter == searchedAddress) {
             found = true;
             break;
         }

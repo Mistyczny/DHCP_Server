@@ -2,7 +2,6 @@
 #include "LocalNetworkingSettings.h"
 #include "ServerSettings.h"
 #include <atomic>
-#include <iostream>
 
 class Settings {
     private:
@@ -22,7 +21,7 @@ class Settings {
         bool load();
         void setDefault();
 
-        static inline Settings* getInstance() {
+        static Settings* getInstance() {
             if(instance == nullptr) {
                 std::lock_guard<std::mutex> lock(settingsLocker);
                 instance = new Settings();

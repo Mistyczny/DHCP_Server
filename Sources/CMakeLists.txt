@@ -13,7 +13,6 @@ set(Boost_INCLUDE_DIR /usr/include/boost/include)
 set(Boost_LIBRARY_DIR /usr/include/boost/lib)
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall ")
-set (CMAKE_CXX_FLAGS_RELEASE "-O3 -g0 -Wall -DNDEBUG")
 set (CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(SOURCES src/DhcpServer.cpp

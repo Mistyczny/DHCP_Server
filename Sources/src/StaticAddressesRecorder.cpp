@@ -53,7 +53,6 @@ bool StaticAddressesRecorder::save(AssignedAddress address) {
 size_t StaticAddressesRecorder::instertedAt(AssignedAddress address) {
     if(!root) return RECORD_NOT_FOUND;
     size_t recordIndex{1};
-    std::cout<<"1"<<std::endl;
     XMLElement* sectionHeader;
     while(sectionHeader = root->FirstChildElement(("Address_"+std::to_string(recordIndex)).c_str()), sectionHeader != nullptr) {
         XMLElement* ip = sectionHeader->FirstChildElement("IP");
@@ -85,7 +84,6 @@ bool StaticAddressesRecorder::remove(AssignedAddress address) {
         XMLElement* lastRecord = root->FirstChildElement(("Address_"+std::to_string(findLastRecordNumber())).c_str());
         
         XMLElement* ipToDelete = recordToDelete->FirstChildElement("IP");
-        std::cout<<ipToDelete->GetText()<<std::endl;
         XMLElement* macToDelete = recordToDelete->FirstChildElement("MAC");
 
         XMLElement* lastRecordIp = lastRecord->FirstChildElement("IP");

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 set(This DHCP_SERVER_PROJECT)
 project(${This})
+enable_testing()
 
 # Project properties
 SET(CMAKE_CXX_STANDARD 17)

@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# OLD DONT USE UNTIL ITS REWORKED
 
 import os
 import wget

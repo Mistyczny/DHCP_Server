@@ -2,10 +2,8 @@
 #include "AssignedAddress.h"
 #include <boost/asio.hpp>
 #include <vector>
-#include <deque>
 #include <mutex>
 #include <memory>
-#include <iostream>
 
 /*
  * Class is customized to hold addresses already assigned to new devices
@@ -34,5 +32,7 @@ class AssignedAddresses{
             return &addrStorage[index];
         }
 
-        bool contain(boost::asio::ip::address_v4 addr);
+        bool contain(const boost::asio::ip::address_v4& addr);
+        bool contain(AssignedAddress searchedAddress);
+        bool contain_nolock(AssignedAddress searchedAddress);
 };

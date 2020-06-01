@@ -7,7 +7,7 @@ Settings::Settings() {
 }
 
 Settings::~Settings() {
-
+    delete instance;
 }
 
 LocalNetworkingSettings& Settings::getNetworkSettings() {
