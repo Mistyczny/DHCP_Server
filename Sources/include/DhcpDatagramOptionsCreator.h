@@ -11,7 +11,6 @@ class DhcpDatagramOptionsCreator {
     private:
         size_t currentOptionsSpot;
         std::vector<std::function<bool(DhcpDatagramOptionsCreator*,std::byte)>> requestsHandlers;
-        std::vector<std::byte> clientRequestedOptions;
         std::array<std::byte,DHCP_OPTIONS_LENGTH>& datagramOptions;
 
         void setupHandlers();
@@ -24,5 +23,5 @@ class DhcpDatagramOptionsCreator {
         DhcpDatagramOptionsCreator(std::array<std::byte,DHCP_OPTIONS_LENGTH>& datagramOptions_);
         ~DhcpDatagramOptionsCreator();
 
-        bool writeOptions();
+        bool writeOptions(std::vector<std::byte>& clientRequestedOptions);
 };

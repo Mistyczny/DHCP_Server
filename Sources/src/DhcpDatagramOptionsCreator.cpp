@@ -16,7 +16,7 @@ void DhcpDatagramOptionsCreator::setupHandlers() {
     requestsHandlers.push_back(&DhcpDatagramOptionsCreator::addServerIdentifierOption);
 }
 
-bool DhcpDatagramOptionsCreator::writeOptions() {
+bool DhcpDatagramOptionsCreator::writeOptions(std::vector<std::byte>& clientRequestedOptions) {
     this->addDhcpMagic();
 
     size_t writedOptions{};
