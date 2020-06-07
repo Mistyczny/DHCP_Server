@@ -29,7 +29,7 @@ set(SOURCES src/DhcpServer.cpp
             src/DhcpAckCreator.cpp
             src/DhcpUtils.cpp)
 
-find_package(Boost 1.72.0 REQUIRED)
+find_package(Boost 1.72.0 PATH ${CMAKE_SOURCE_DIR}/3rdParty/boost_1_73_0)
 
 # Executable
 add_executable( ${This} main.cpp ${SOURCES})
