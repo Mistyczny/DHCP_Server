@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 set(This DHCP_Server_tests)
 enable_testing()
 
-set(BOOST_ROOT /usr/include/boost)
-set(Boost_INCLUDE_DIR /usr/include/boost/include)
-set(Boost_LIBRARY_DIR /usr/include/boost/lib)
+set(BOOST_ROOT ${CMAKE_SOURCE_DIR}/3rdParty/boost_1_73_0/boost)
+set(Boost_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/3rdParty/boost_1_73_0/)
+set(Boost_LIBRARY_DIR ${CMAKE_SOURCE_DIR}/3rdParty/boost_1_73_0/stage/lib)
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall")
 set (CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -19,7 +19,7 @@ link_libraries(${tinyxml})
 link_libraries(${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
 include_directories("../Sources/include")
-include_directories("/usr/include/boost/include")
+include_directories("../3rdParty/boost_1_73_0/")
 include_directories("../3rdParty/tinyxml2/")
 
 add_subdirectory(DhcpUtilsTests)

@@ -11,4 +11,4 @@ SET(Boost_USE_MULTITHREAD ON)
 SET(Boost_NO_SYSTEM_PATHS TRUE)
 
 add_subdirectory(Sources)
-#add_subdirectory(Tests)
+add_subdirectory(Tests)
