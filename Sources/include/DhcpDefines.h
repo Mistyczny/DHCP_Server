@@ -70,7 +70,7 @@ namespace DHCP_Defines{
         XWindowFont,
         XWindowManager,
         AddressRequest,
-        AddressTime,
+        LeasingAddressTime,
         Overload,
         DhcpMessageType,
         DhcpServerIdentifier,

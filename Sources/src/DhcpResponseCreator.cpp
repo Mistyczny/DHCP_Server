@@ -21,21 +21,6 @@ std::array<int,4> addressOctetsToInt(boost::asio::ip::address_v4 addr) {
     return partials;
 }
 
-std::array<std::string,4> addressOctets(boost::asio::ip::address_v4 addr) {
-    std::array<std::string,4> partials;
-    std::string address = addr.to_string();
-
-    for(size_t pos = 0; pos < 4; pos++) {
-        size_t nextDot = address.find_first_of('.');
-        if(nextDot != std::string::npos) {
-            partials[pos] = address.substr(0,nextDot);
-            address.erase(0,nextDot+1);
-        } else partials[pos] = address;
-    }
-
-    return partials;
-}
-
 DhcpResponseCreator::DhcpResponseCreator(DhcpDatagram* _clientDatagram, AssignedAddresses& _assignedAddresses):  clientDatagram{_clientDatagram},
                                                                                                                 assignedAddresses{_assignedAddresses},
                                                                                                                 responseDatagram{},
@@ -59,12 +44,18 @@ bool DhcpResponseCreator::readClientRequestedOptions() {
     std::optional<size_t> clientsRequestsPosition = DhcpUtils::findOptionPosition(clientDatagram->options,DHCP_Defines::OptionCode::ParameterList);
     if(clientsRequestsPosition.has_value()) {
         size_t howManyParameters = std::to_integer<size_t>(clientDatagram->options[*clientsRequestsPosition+1]);
+        clientRequestedOptions.reserve(howManyParameters);
 
         for(size_t readingPosition = *clientsRequestsPosition + 2; readingPosition < *clientsRequestsPosition + howManyParameters + 2; ++readingPosition) {
             clientRequestedOptions.push_back(clientDatagram->options[readingPosition]);
         }
     }
-    else return false;
+    
+    return clientRequestedOptions.size();
+}
+
+bool DhcpResponseCreator::addClientRequestedOptions() {
+
 }
 
 DhcpDatagram& DhcpResponseCreator::getResponse() {

@@ -26,6 +26,7 @@ class DhcpResponseCreator {
         void addEndOptionBit();
 
         bool readClientRequestedOptions();
+        bool addClientRequestedOptions();
     public:
         DhcpResponseCreator(DhcpDatagram* _clientDatagram, AssignedAddresses& _assignedAddresses);
         virtual ~DhcpResponseCreator();
