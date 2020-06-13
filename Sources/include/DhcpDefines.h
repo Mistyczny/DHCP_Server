@@ -22,7 +22,7 @@ namespace DHCP_Defines{
         Padding = 0,
         SubnetMask,
         TimeOffset,
-        Router,
+        RouterAddress,
         ServerTime,
         ServerName,
         DnsServerAddress,

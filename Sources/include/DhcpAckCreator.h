@@ -6,10 +6,10 @@
 class DhcpAckCreator : public DhcpResponseCreator {
     private:
         bool verifyClientAddress();
+        virtual bool addClientRequestedOptions() override;
     public:
         DhcpAckCreator(DhcpDatagram* _clientDatagram, AssignedAddresses& _assignedAddresses);
         virtual ~DhcpAckCreator();
 
         virtual bool create() override;
-        virtual void setMessageTypeOption() override;
 };

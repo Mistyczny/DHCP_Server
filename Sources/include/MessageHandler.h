@@ -12,13 +12,13 @@ class MessageHandler{
         std::array<char,sizeof(DhcpDatagram)> responseBuffer;
         std::array<char,1024> recvBuffer;
         
-        void process();
-        void createServerResponse();
+        bool process();
+        bool createServerResponse();
         bool setResponseConstantParameters();
 
-        void onDiscover();
-        void onRequest();
-        void onRelease();
+        bool onDiscover();
+        bool onRequest();
+        bool onRelease();
 
         void printMessage();
     public:

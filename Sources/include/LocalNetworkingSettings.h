@@ -14,5 +14,6 @@ struct LocalNetworkingSettings{
     boost::asio::ip::address_v4 subnetMask;
     boost::asio::ip::address_v4 gatewayAddress;
     boost::asio::ip::address_v4 routerAddress;
+    boost::asio::ip::address_v4 dnsAddress;
     boost::asio::ip::address_v4_range addressesPool;
 };

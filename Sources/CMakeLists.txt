@@ -27,7 +27,8 @@ set(SOURCES src/DhcpServer.cpp
             src/DhcpOfferCreator.cpp
             src/DhcpAckCreator.cpp
             src/DhcpUtils.cpp
-            src/DhcpDatagramOptionsCreator.cpp)
+            src/DhcpDatagramOptionsCreator.cpp
+            src/Logger.cpp)
 
 find_package(Boost 1.72.0)
 

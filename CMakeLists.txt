@@ -5,7 +5,7 @@ enable_testing()
 
 # Project properties
 SET(CMAKE_CXX_STANDARD 17)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -pthread")
 
 SET(Boost_USE_MULTITHREAD ON)
 SET(Boost_NO_SYSTEM_PATHS TRUE)

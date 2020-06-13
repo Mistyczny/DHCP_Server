@@ -1,4 +1,5 @@
 #include "DhcpUtils.h"
+#include <iostream>
 
 namespace DhcpUtils {
     
@@ -19,10 +20,13 @@ std::array<int,4> addressToIntParts(boost::asio::ip::address_v4 addr) {
 
 boost::asio::ip::address_v4 stdByteArrayToAddress(std::array<std::byte,4>& addressParts) {
     std::string addrString{};
-    for(size_t octet = 0; octet < addressParts.size(); ++octet){
+    for(size_t octet = 0; octet < addressParts.size(); ++octet) {
         addrString += std::to_string(std::to_integer<int>(addressParts[octet]));
+        if(octet != addressParts.size()-1) {
+            addrString += ".";
+        }
     }
-    
+
     return boost::asio::ip::address_v4::from_string(addrString);
 }
 
@@ -30,6 +34,7 @@ std::optional<size_t> findOptionPosition(std::array<std::byte,DHCP_OPTIONS_LENGT
     size_t position = 4; /* Starting from position 4, because 0,1,2,3 is taken by DHCP Magic, which we ignore */
 
     while(position < DHCP_OPTIONS_LENGTH) {
+        std::cout<<"OPT: "<<std::to_integer<int>(options[position])<<std::endl;
         if(std::to_integer<int>(options[position]) == 0) return {};
 
         if(std::to_integer<int>(options[position]) == searchingOption) {

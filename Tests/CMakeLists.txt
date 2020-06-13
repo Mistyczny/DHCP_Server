@@ -24,3 +24,5 @@ include_directories("../3rdParty/tinyxml2/")
 
 add_subdirectory(DhcpUtilsTests)
 add_subdirectory(AssignedAddressesTests)
+add_subdirectory(DhcpDatagramOptionsCreatorTests)
+add_subdirectory(DhcpResponseCreatorsTests)

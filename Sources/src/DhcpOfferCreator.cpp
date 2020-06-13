@@ -1,39 +1,49 @@
 #include "DhcpOfferCreator.h"
 #include "AddressesElector.h"
-#include "ReservedAdresses.h"
+#include "DhcpDefines.h"
+#include "DhcpDatagramOptionsCreator.h"
 #include <optional>
 #include <algorithm>
+#include <iostream>
+#include "Logger.h"
 
 DhcpOfferCreator::DhcpOfferCreator(DhcpDatagram* _clientDatagram, AssignedAddresses& _assignedAddresses) : DhcpResponseCreator{_clientDatagram, _assignedAddresses} {
-    
+
 }
 
 DhcpOfferCreator::~DhcpOfferCreator() {
 
 }
 
-void DhcpOfferCreator::setMessageTypeOption() {
-    this->responseDatagram.options[currentOptionsSpot++] = std::byte(DhcpDatagramTypes::Options::MessageType);
-    this->responseDatagram.options[currentOptionsSpot++] = std::byte(1); /* Sizeof message */
-    this->responseDatagram.options[currentOptionsSpot++] = std::byte(2); 
-}
-
 bool DhcpOfferCreator::create() {
-    this->addClientAddress();
-    this->setDhcpMagic();
-    this->setMessageTypeOption();
-    this->addServerIdentifierOption();
-    this->addLeasingDurationOption();
-    this->addSubnetMaskOption();
-    this->addRouterAddressOption();
-    this->addDomainNameServerOption();
-    this->addEndOptionBit();
+    this->writeCommon();
+    this->rewriteClientData();
+    if(!this->addClientAddress()) {
+        Logging::ERROR("Failure during electing address for client");
+    } else if(!this->addClientRequestedOptions()) {
+        Logging::ERROR("Failure during writing datagram options");
+    } else {
+        return true;
+    }
+
+    return false;
 }
 
-void DhcpOfferCreator::addClientAddress() {
+bool DhcpOfferCreator::addClientRequestedOptions() {
+    auto optionsToWrite = readClientRequestedOptions();
+    optionsToWrite.insert(std::byte(DHCP_Defines::OptionCode::DhcpServerIdentifier));
+    optionsToWrite.insert(std::byte(DHCP_Defines::OptionCode::LeasingAddressTime));
+
+    DhcpDatagramOptionsCreator creator(responseDatagram.options);
+    return creator.writeOptions(std::move(optionsToWrite),std::byte(DHCP_Defines::Offer));
+}
+
+bool DhcpOfferCreator::addClientAddress() {
     AddressesElector elector(assignedAddresses);
     std::optional<boost::asio::ip::address_v4> proposal = elector.proposeV4Address();
     if(proposal.has_value()) {
         this->responseDatagram.offeredIpAddress = *proposal;
+        return true;
     }
+    return false;
 }

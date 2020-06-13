@@ -197,7 +197,7 @@ bool SettingsRecorder::loadingSettings() {
 
 bool SettingsRecorder::loadLocalNetworkingSettings() {
     int returnStatus{true};
-    auto& [subnetMask,gatewayAddress,routerAddress,addressesPool] = settings.getNetworkSettings();
+    auto& [subnetMask,gatewayAddress,routerAddress, dnsAddress, addressesPool] = settings.getNetworkSettings();
 
     XMLElement* sectionHeader = root->FirstChildElement(LOCAL_NETWORKING_SETTINGS_NAME);
     if(!sectionHeader) {

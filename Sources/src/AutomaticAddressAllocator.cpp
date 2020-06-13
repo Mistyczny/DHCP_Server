@@ -1,6 +1,7 @@
 #include "AutomaticAddressAllocator.h"
 #include <syslog.h>
 #include "DhcpDatagram.h"
+#include "Logger.h"
 #include <iostream>
 
 AutomaticAddressAllocator::AutomaticAddressAllocator(boost::asio::io_context& ioContext,AssignedAddresses& _assignedAddresses) :
@@ -25,19 +26,21 @@ void AutomaticAddressAllocator::listen() {
         if(bytesRead > 0 ) {
             this->datagramReceived(bytesRead);
         } else {
-            std::cout<<"Error during listening on socket"<<std::endl;
+            Logging::ERROR("Failure on receive_from dhcp clients");
         }
     }
 }
 
 void AutomaticAddressAllocator::datagramReceived(std::size_t bytesRead) {
     if(receivedMessageHandler.createResponse()) {
-        boost::asio::ip::udp::endpoint ep(boost::asio::ip::address_v4::broadcast(), 68);
+        boost::asio::ip::udp::endpoint broadcastEnpoint(boost::asio::ip::address_v4::broadcast(), 68);
 
-        if(socket.send_to(boost::asio::buffer(receivedMessageHandler.getResponseBuffer()),ep) <= 0) {
-            std::cout<<"Failed to send response message"<<std::endl;
-        } else std::cout<<"SEND MESSAGE"<<std::endl;
+        if(socket.send_to(boost::asio::buffer(receivedMessageHandler.getResponseBuffer()),broadcastEnpoint) <= 0) {
+            Logging::ERROR("Failure on sending message broadcast");
+        } else {
+            Logging::TRACE("Broadcast dhcp message have been sent");
+        }
     } else {
-        std::cout<<"Failed to create response message"<<std::endl;
+        Logging::TRACE("Creating dhcp message failure");
     }
 }

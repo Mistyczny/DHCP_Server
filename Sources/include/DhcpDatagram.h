@@ -11,8 +11,8 @@
 #define MAX_DHCP_CHADDR_LENGTH 16
 #define MAX_DHCP_SERVER_NAME_LENGTH 64
 #define MAX_DHCP_FILE_LENGTH 128
-#define MAX_DHCP_OPTIONS_LENGTH 312
-#define DHCP_OPTIONS_LENGTH 39
+#define MAX_DHCP_OPTIONS_LENGTH 78 //std::bytes
+#define DHCP_OPTIONS_LENGTH 78
 
 using namespace boost::asio::ip;
 

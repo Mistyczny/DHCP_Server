@@ -7,6 +7,9 @@
 #include <exception>
 #include <iostream>
 #include "DhcpAckCreator.h"
+#include "Logger.h"
+#include "DhcpUtils.h"
+#include <optional>
 
 MessageHandler::MessageHandler(AssignedAddresses& addrs) :  errorCode{},
                                                             assignedAdddresses{addrs} {
@@ -29,74 +32,78 @@ void MessageHandler::clear() {
 }
 
 bool MessageHandler::createResponse() {
+    bool created{false};
     try{
-        this->process();
+        created = this->process();
     } catch (std::exception& ex) {
-        this->errorCode = MessageError::UNKOWN_ERROR;
+        std::string error{};
+        Logging::ERROR("Exception catched:" + static_cast<std::string>(ex.what()));
     }
 
-    return true;
+    return created;
 }
 
-void MessageHandler::process() {
+bool MessageHandler::process() {
+    bool processing{false};
     switch(std::to_integer<int>(datagram->operationCode)) {
         case DHCP_Defines::Client_message:
-            this->createServerResponse();
+            processing = this->createServerResponse();
             break;
         case DHCP_Defines::Server_message:
-            this->errorCode = MessageError::SERVER_RECEIVED_RESPONSE_OPCODE;
-            return;
-        default:
-            this->errorCode = MessageError::WRONG_OPCODE_CODE;
-            return;
-    }
-}
-
-void MessageHandler::createServerResponse() {
-    switch(int messageType = std::to_integer<int>(datagram->options[6]);messageType){
-        case DHCP_Defines::Discover:
-            std::cout<<"DISCOVER"<<std::endl;
-            this->onDiscover();
-            break;
-        case DHCP_Defines::Request:
-        this->errorCode = 1;
-            std::cout<<"REQUEST"<<std::endl;
-            this->onRequest();
-            break;
-        case DHCP_Defines::Release:
-         this->errorCode = 2;
-            std::cout<<"RELEASE"<<std::endl;
-            this->onRelease();
+            Logging::WARNING("Received message with server response opcode");
             break;
         default:
-            return;
+            Logging::WARNING("Received message with unkown opcode = "+std::to_string(std::to_integer<int>(datagram->operationCode)));
+            break;
     }
+    return processing;
 }
 
-void MessageHandler::onDiscover() {
+bool MessageHandler::createServerResponse() {
+    bool responseCreted{false};
+    std::optional<size_t> messageTypePosition = DhcpUtils::findOptionPosition(datagram->options,DHCP_Defines::OptionCode::DhcpMessageType);
+    if(messageTypePosition.has_value()) {
+        switch(int messageType = std::to_integer<int>(datagram->options[*messageTypePosition]);messageType) {
+            case DHCP_Defines::Discover:
+                responseCreted = this->onDiscover();
+                break;
+            case DHCP_Defines::Request:
+                responseCreted = this->onRequest();
+                break;
+            case DHCP_Defines::Release:
+                responseCreted = this->onRelease();
+                break;
+        }
+    }
+
+    return responseCreted;
+}
+
+bool MessageHandler::onDiscover() {
     DhcpOfferCreator offerCreator(datagram, assignedAdddresses);
     if(offerCreator.create()) {
         memcpy(&responseBuffer,&offerCreator.getResponse(),sizeof(DhcpDatagram));
+        return true;
     }
+
+    return false;
 }
 
-void MessageHandler::onRequest() {
+bool MessageHandler::onRequest() {
     DhcpAckCreator ackCreator(datagram, assignedAdddresses);
     if(ackCreator.create()) {
         memcpy(&responseBuffer,&ackCreator.getResponse(),sizeof(DhcpDatagram));
+        return true;
     }
+
+    return false;
 }
 
-void MessageHandler::onRelease(){
-
+bool MessageHandler::onRelease() {
+    /* Not implemented yet */
+    return false;
 }
 
 std::array<char,sizeof(DhcpDatagram)>& MessageHandler::getResponseBuffer() {
-    for(int i=0;i<responseBuffer.size();i++) {
-        std::cout<<responseBuffer[i];
-    }
-    std::cout<<"\n";
-    DhcpDatagram* dt = reinterpret_cast<DhcpDatagram*>(&responseBuffer);
-    std::cout<<"OP CODE: "<<std::to_integer<int>(dt->operationCode)<<std::endl;
     return this->responseBuffer;
 }
