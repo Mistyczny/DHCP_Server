@@ -34,7 +34,6 @@ std::optional<size_t> findOptionPosition(std::array<std::byte,DHCP_OPTIONS_LENGT
     size_t position = 4; /* Starting from position 4, because 0,1,2,3 is taken by DHCP Magic, which we ignore */
 
     while(position < DHCP_OPTIONS_LENGTH) {
-        std::cout<<"OPT: "<<std::to_integer<int>(options[position])<<std::endl;
         if(std::to_integer<int>(options[position]) == 0) return {};
 
         if(std::to_integer<int>(options[position]) == searchingOption) {

@@ -21,7 +21,6 @@ set(SOURCES src/DhcpServer.cpp
             src/LeasingMonitor.cpp
             src/AutomaticAddressAllocator.cpp
             src/MessageHandler.cpp
-            src/AddressesElector.cpp
             src/StaticAddressesRecorder.cpp
             src/DhcpResponseCreator.cpp
             src/DhcpOfferCreator.cpp

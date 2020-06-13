@@ -11,8 +11,7 @@
 #include "DhcpUtils.h"
 #include <optional>
 
-MessageHandler::MessageHandler(AssignedAddresses& addrs) :  errorCode{},
-                                                            assignedAdddresses{addrs} {
+MessageHandler::MessageHandler(AssignedAddresses& addrs) :  assignedAdddresses{addrs} {
     datagram = reinterpret_cast<DhcpDatagram*>(&recvBuffer);
     this->clear();
 }
@@ -28,7 +27,6 @@ std::array<char,1024>* MessageHandler::getBuffer() {
 void MessageHandler::clear() {
     memset(&recvBuffer,0,sizeof(recvBuffer));
     memset(&responseBuffer, 0, sizeof(responseBuffer));
-    errorCode = 0;
 }
 
 bool MessageHandler::createResponse() {

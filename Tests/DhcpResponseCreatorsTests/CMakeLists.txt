@@ -4,7 +4,6 @@ project(${This})
 
 set(COMMON_SOURCES  ../../Sources/src/DhcpResponseCreator.cpp
                     ../../Sources/src/AssignedAddresses.cpp
-                    ../../Sources/src/AddressesElector.cpp
                     ../../Sources/src/DhcpDatagramOptionsCreator.cpp
                     ../../Sources/src/DhcpUtils.cpp
                     ../../Sources/src/Settings.cpp

@@ -2,6 +2,7 @@
 #include "DhcpUtils.h"
 #include "DhcpDatagramOptionsCreator.h"
 #include "DhcpDefines.h"
+#include "Logger.h"
 #include <iostream>
 
 DhcpAckCreator::DhcpAckCreator(DhcpDatagram* _clientDatagram, AssignedAddresses& _assignedAddresses) : DhcpResponseCreator{_clientDatagram, _assignedAddresses} {
@@ -17,9 +18,9 @@ bool DhcpAckCreator::create() {
     this->rewriteClientData();
 
     if(!this->verifyClientAddress()) {
-        std::cout<<"LOGGING ERR"<<std::endl;
+        Logging::ERROR("Failure during verification address for client");
     } else if(!this->addClientRequestedOptions()) {
-        std::cout<<"LOGGING ERR"<<std::endl;
+        Logging::ERROR("Failure during writing datagram options");
     } else {
         return true;
     }
@@ -46,10 +47,6 @@ bool DhcpAckCreator::verifyClientAddress() {
         address[3] = clientDatagram->options[*addrPosition+5];
         boost::asio::ip::address_v4 addr;
         AssignedAddress assigned;
-        std::cout<<std::to_integer<int>(address[0])<<std::endl;
-        std::cout<<std::to_integer<int>(address[1])<<std::endl;
-        std::cout<<std::to_integer<int>(address[2])<<std::endl;
-        std::cout<<std::to_integer<int>(address[3])<<std::endl;
         assigned.ip = DhcpUtils::stdByteArrayToAddress(address);
         assigned.clientHardwareAddress = clientDatagram->hardwareAddress;
         assigned.assignationTime = std::chrono::system_clock::now();

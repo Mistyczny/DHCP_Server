@@ -1,12 +1,10 @@
 #pragma once
 #include "DhcpDatagram.h"
 #include "AssignedAddresses.h"
-#include "AddressesElector.h"
 #include <array>
 
 class MessageHandler{
     private:
-        int errorCode;
         DhcpDatagram* datagram;
         AssignedAddresses& assignedAdddresses;
         std::array<char,sizeof(DhcpDatagram)> responseBuffer;

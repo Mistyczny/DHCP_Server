@@ -1,11 +1,9 @@
 #include "DhcpOfferCreator.h"
-#include "AddressesElector.h"
 #include "DhcpDefines.h"
 #include "DhcpDatagramOptionsCreator.h"
+#include "Logger.h"
 #include <optional>
 #include <algorithm>
-#include <iostream>
-#include "Logger.h"
 
 DhcpOfferCreator::DhcpOfferCreator(DhcpDatagram* _clientDatagram, AssignedAddresses& _assignedAddresses) : DhcpResponseCreator{_clientDatagram, _assignedAddresses} {
 
@@ -39,11 +37,15 @@ bool DhcpOfferCreator::addClientRequestedOptions() {
 }
 
 bool DhcpOfferCreator::addClientAddress() {
-    AddressesElector elector(assignedAddresses);
-    std::optional<boost::asio::ip::address_v4> proposal = elector.proposeV4Address();
-    if(proposal.has_value()) {
-        this->responseDatagram.offeredIpAddress = *proposal;
-        return true;
+    bool added{false};
+    auto iter = Settings::getInstance()->getNetworkSettings().addressesPool.begin();
+    while(iter != Settings::getInstance()->getNetworkSettings().addressesPool.end()) {
+        if(!assignedAddresses.contain(*iter)) {
+            this->responseDatagram.offeredIpAddress = *iter;
+            added = true;
+        }
+        iter++;
     }
-    return false;
+
+    return added;
 }
