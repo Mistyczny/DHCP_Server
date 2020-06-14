@@ -63,10 +63,10 @@ bool MessageHandler::createServerResponse() {
     if(messageTypePosition.has_value()) {
         switch(int messageType = std::to_integer<int>(datagram->options[*messageTypePosition]);messageType) {
             case DHCP_Defines::Discover:
-                responseCreted = this->onDiscover();
+                responseCreted = this->createOffer();
                 break;
             case DHCP_Defines::Request:
-                responseCreted = this->onRequest();
+                responseCreted = this->createAck();
                 break;
             case DHCP_Defines::Release:
                 responseCreted = this->onRelease();
@@ -77,7 +77,7 @@ bool MessageHandler::createServerResponse() {
     return responseCreted;
 }
 
-bool MessageHandler::onDiscover() {
+bool MessageHandler::createOffer() {
     DhcpOfferCreator offerCreator(datagram, assignedAdddresses);
     if(offerCreator.create()) {
         memcpy(&responseBuffer,&offerCreator.getResponse(),sizeof(DhcpDatagram));
@@ -87,7 +87,7 @@ bool MessageHandler::onDiscover() {
     return false;
 }
 
-bool MessageHandler::onRequest() {
+bool MessageHandler::createAck() {
     DhcpAckCreator ackCreator(datagram, assignedAdddresses);
     if(ackCreator.create()) {
         memcpy(&responseBuffer,&ackCreator.getResponse(),sizeof(DhcpDatagram));

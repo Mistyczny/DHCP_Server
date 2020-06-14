@@ -1,11 +1,12 @@
 #include "DhcpResponseCreator.h"
 #include "DhcpUtils.h"
 #include "DhcpDefines.h"
+#include "Logger.h"
+#include "DhcpDatagramOptionsCreator.h"
 #include <iostream>
 #include <cstddef>
 #include <algorithm>
 #include <array>
-#include "DhcpDatagramOptionsCreator.h"
 
 DhcpResponseCreator::DhcpResponseCreator(DhcpDatagram* _clientDatagram, AssignedAddresses& _assignedAddresses):  clientDatagram{_clientDatagram},
                                                                                                                 assignedAddresses{_assignedAddresses},
@@ -37,7 +38,7 @@ std::set<std::byte> DhcpResponseCreator::readClientRequestedOptions() {
             clientRequestedOptions.insert(clientDatagram->options[readingPosition]);
         }
     } else {
-        std::cout<<"NOT FOUND"<<std::endl;
+        Logging::WARNING("Failure during writing datagram options");  
     }
     
     return clientRequestedOptions;

@@ -14,8 +14,8 @@ class MessageHandler{
         bool createServerResponse();
         bool setResponseConstantParameters();
 
-        bool onDiscover();
-        bool onRequest();
+        bool createOffer();
+        bool createAck();
         bool onRelease();
 
         void printMessage();

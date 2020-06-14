@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_SUITE(DhcpOfferCreatorUT)
         DhcpDatagram clientDatagram;
         clientDatagram.operationCode = std::byte(DHCP_Defines::opcode::Client_message);
         DhcpOfferCreator offerCreator{&clientDatagram, addresses};
-        BOOST_TEST(offerCreator.create());
+        offerCreator.create();
         DhcpDatagram& createdResponse = offerCreator.getResponse();
         BOOST_TEST(std::to_integer<int>(createdResponse.operationCode) == std::to_integer<int>(std::byte(DHCP_Defines::opcode::Server_message)));
     }
@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_SUITE(DhcpOfferCreatorUT)
         clientDatagram.transactionID = TEST_TRANSACTION_ID;
         clientDatagram.flags = TEST_FLAGS;
         DhcpOfferCreator offerCreator{&clientDatagram, addresses};
-        BOOST_TEST(offerCreator.create());
+        offerCreator.create();
         DhcpDatagram& createdResponse = offerCreator.getResponse();
         BOOST_TEST(std::to_integer<int>(createdResponse.hardwareType) == std::to_integer<int>(std::byte(HardwareTypes::Ethernet)));
         BOOST_TEST(std::to_integer<int>(createdResponse.hardwareTypeLength) == std::to_integer<int>(std::byte(6)));
